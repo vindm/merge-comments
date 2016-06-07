@@ -1,0 +1,30 @@
+{
+  "name": "merge-comments",
+  "version": "0.0.2",
+  "description": "Simple tool that merges single-line comments into multi-line ones.",
+  "keywords": [
+    "merge",
+    "comments",
+    "single-line",
+    "multi-line",
+    "multiline",
+    "cli"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vindm/merge-comments.git"
+  },
+  "author": {
+    "name": "Dmitriy Vinokurov",
+    "email": "vinokuroff.dm@gmail.com",
+    "url": "https://github.com/vindm"
+  },
+  "bin" : {
+    "merge-comments" : "./bin/merge-comments"
+  },
+  "license": "MIT",
+  "main": "lib/index.js",
+  "dependencies": {
+    "command-line-args": "^3.0.0"
+  }
+}

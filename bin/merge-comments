@@ -1,0 +1,72 @@
+#!/usr/bin/env node
+
+var fs = require('fs'),
+    path = require('path'),
+    commandLineArgs = require('command-line-args'),
+    mergeComments = require('../lib/');
+
+var options = commandLineArgs([
+    {
+        name: 'help',
+        alias: 'h',
+        type: Boolean,
+        description: 'Display this usage guide.'
+    },
+    {
+        name: 'input',
+        alias: 'i',
+        type: String,
+        multiple: true,
+        defaultOption: true,
+        description: 'The input files to process'
+    },
+    {
+        name: 'output',
+        alias: 'o',
+        type: String,
+        defaultValue: '-',
+        description: 'The output dir path'
+    },
+    {
+        name: 'mask',
+        alias: 'm',
+        type: String,
+        defaultValue: '_?',
+        description: 'The input files to process'
+    }
+]);
+
+options.input.forEach(function(input) {
+
+    fs.readFile(input, 'utf8', function(err, data) {
+        var result,
+            output;
+
+        if (err) {
+            console.error(err);
+
+            return;
+        }
+
+        result = mergeComments(data);
+
+        if (options.output === '-') {
+            console.log('Done: %s:', input);
+            process.stdout.write(result);
+
+            return;
+        }
+
+        output = path.join(options.output, options.mask.replace('?', path.basename(input)));
+
+        fs.writeFile(output, result, function(err) {
+            if (err) {
+                console.error(err);
+
+                return;
+            }
+
+            console.log('Done: %s -> %s', input, output);
+        });
+    });
+});
