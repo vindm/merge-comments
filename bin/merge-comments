@@ -7,12 +7,6 @@ var fs = require('fs'),
 
 var options = commandLineArgs([
     {
-        name: 'help',
-        alias: 'h',
-        type: Boolean,
-        description: 'Display this usage guide.'
-    },
-    {
         name: 'input',
         alias: 'i',
         type: String,

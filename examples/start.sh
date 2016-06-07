@@ -1,2 +1,2 @@
 #!/bin/sh
-merge-commits 'demo/*[AB].css'
+merge-comments examples/simple.js

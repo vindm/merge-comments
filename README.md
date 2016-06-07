@@ -47,8 +47,6 @@ Usage:
 ```
 Options:
 ```sh
-    -h, --help : Help
-    -v, --version : Version
     -i INPUT, --input=INPUT : Glob string(s) or file path(s) to process, "-" for STDIN
     -o, --output : Output directory path, "-" for STDOUT
     -m, --mask : Mask for output file name, '_?' by defaults
