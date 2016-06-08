@@ -12,6 +12,7 @@ var options = commandLineArgs([
         type: String,
         multiple: true,
         defaultOption: true,
+        defaultValue: '-',
         description: 'The input files to process'
     },
     {
@@ -30,37 +31,58 @@ var options = commandLineArgs([
     }
 ]);
 
-options.input.forEach(function(input) {
+function processFileContent(data, input) {
+    var result = mergeComments(data),
+        output;
 
-    fs.readFile(input, 'utf8', function(err, data) {
-        var result,
-            output;
+    if (options.output === '-') {
+        console.log('Done: %s:', input);
+        process.stdout.write(result);
 
+        return;
+    }
+
+    output = path.join(options.output, options.mask.replace('?', path.basename(input)));
+
+    fs.writeFile(output, result, function(err) {
         if (err) {
             console.error(err);
 
             return;
         }
 
-        result = mergeComments(data);
+        console.log('Done: %s -> %s', input, output);
+    });
+}
 
-        if (options.output === '-') {
-            console.log('Done: %s:', input);
-            process.stdout.write(result);
+if ( ! Array.isArray(options.input)) {
+    options.input = [ options.input ];
+}
+
+options.input.forEach(function(input) {
+    var data = '';
+
+    if (input === '-') {
+        process.stdin.pause();
+        process.stdin
+            .on('data', function(chunk) {
+                chunk && (data += chunk);
+            })
+            .once('end', function() {
+                processFileContent(data, input);
+            })
+            .resume();
+
+        return;
+    }
+
+    fs.readFile(input, 'utf8', function(err, data) {
+        if (err) {
+            console.error(err);
 
             return;
         }
 
-        output = path.join(options.output, options.mask.replace('?', path.basename(input)));
-
-        fs.writeFile(output, result, function(err) {
-            if (err) {
-                console.error(err);
-
-                return;
-            }
-
-            console.log('Done: %s -> %s', input, output);
-        });
+        processFileContent(data, input);
     });
 });
