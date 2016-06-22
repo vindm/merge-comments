@@ -1,6 +1,6 @@
 {
   "name": "merge-comments",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Simple tool that merges single-line comments into multi-line ones.",
   "keywords": [
     "merge",
