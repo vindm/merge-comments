@@ -36,7 +36,6 @@ function processFileContent(data, input) {
         output;
 
     if (options.output === '-') {
-        console.log('Done: %s:', input);
         process.stdout.write(result);
 
         return;
@@ -44,15 +43,7 @@ function processFileContent(data, input) {
 
     output = path.join(options.output, options.mask.replace('?', path.basename(input)));
 
-    fs.writeFile(output, result, function(err) {
-        if (err) {
-            console.error(err);
-
-            return;
-        }
-
-        console.log('Done: %s -> %s', input, output);
-    });
+    fs.writeFile(output, result);
 }
 
 if ( ! Array.isArray(options.input)) {
@@ -77,12 +68,8 @@ options.input.forEach(function(input) {
     }
 
     fs.readFile(input, 'utf8', function(err, data) {
-        if (err) {
-            console.error(err);
-
-            return;
+        if ( ! err) {
+            processFileContent(data, input);
         }
-
-        processFileContent(data, input);
     });
 });
